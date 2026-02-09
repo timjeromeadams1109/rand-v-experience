@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, Suspense } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Scissors } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 
 function SignupForm() {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const redirect = searchParams.get('redirect') || '/'
 
