@@ -31,7 +31,13 @@ function LoginForm() {
     })
 
     if (authError) {
-      setError(authError.message)
+      if (authError.message.includes('Invalid login')) {
+        setError('Invalid email or password. Please try again.')
+      } else if (authError.message.includes('Email not confirmed')) {
+        setError('Please confirm your email address before signing in.')
+      } else {
+        setError(authError.message)
+      }
       setLoading(false)
       return
     }
@@ -40,16 +46,16 @@ function LoginForm() {
   }
 
   return (
-    <div className="w-full max-w-md">
-      <div className="text-center mb-8">
-        <Link href="/" className="inline-flex items-center gap-2 mb-6">
-          <Scissors className="w-8 h-8 text-california-gold" />
-          <span className="font-bebas text-2xl text-warm-white tracking-wider">RAND V</span>
+    <div className="w-full max-w-md px-4 sm:px-0">
+      <div className="text-center mb-6 sm:mb-8">
+        <Link href="/" className="inline-flex items-center gap-2 mb-4 sm:mb-6">
+          <Scissors className="w-6 h-6 sm:w-8 sm:h-8 text-california-gold" />
+          <span className="font-bebas text-xl sm:text-2xl text-warm-white tracking-wider">RAND V</span>
         </Link>
-        <h1 className="font-bebas text-4xl text-warm-white tracking-wide mb-2">
+        <h1 className="font-bebas text-3xl sm:text-4xl text-warm-white tracking-wide mb-2">
           Welcome Back
         </h1>
-        <p className="text-warm-white/60">
+        <p className="text-warm-white/60 text-sm sm:text-base">
           Sign in to book your experience
         </p>
       </div>
@@ -62,6 +68,7 @@ function LoginForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          autoComplete="email"
         />
         <Input
           type="password"
@@ -70,6 +77,7 @@ function LoginForm() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          autoComplete="current-password"
         />
 
         {error && (
@@ -83,7 +91,7 @@ function LoginForm() {
         </Button>
       </form>
 
-      <p className="text-center text-warm-white/60 mt-6">
+      <p className="text-center text-warm-white/60 mt-6 text-sm sm:text-base">
         Don&apos;t have an account?{' '}
         <Link href={`/auth/signup?redirect=${redirect}`} className="text-california-gold hover:underline">
           Sign up
@@ -95,7 +103,7 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen bg-matte-black flex items-center justify-center px-6">
+    <div className="min-h-screen bg-matte-black flex items-center justify-center px-4 sm:px-6">
       <Suspense fallback={<div className="text-warm-white">Loading...</div>}>
         <LoginForm />
       </Suspense>

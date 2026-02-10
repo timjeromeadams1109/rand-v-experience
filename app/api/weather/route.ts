@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic'
+
 const OPENWEATHERMAP_API_KEY = process.env.OPENWEATHERMAP_API_KEY
 const DEFAULT_LAT = 34.0522 // Los Angeles
 const DEFAULT_LON = -118.2437

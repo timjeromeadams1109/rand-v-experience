@@ -1,14 +1,15 @@
 'use client'
 
 import { useState, Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { Scissors } from 'lucide-react'
+import { Scissors, Check } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 
 function SignupForm() {
+  const router = useRouter()
   const searchParams = useSearchParams()
   const redirect = searchParams.get('redirect') || '/'
 
@@ -18,23 +19,52 @@ function SignupForm() {
   const [phone, setPhone] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
+  const [fieldErrors, setFieldErrors] = useState<{[key: string]: string}>({})
+
+  const validateForm = () => {
+    const errors: {[key: string]: string} = {}
+
+    // Name validation
+    if (fullName.trim().length < 2) {
+      errors.fullName = 'Please enter your full name'
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      errors.email = 'Please enter a valid email address'
+    }
+
+    // Password validation
+    if (password.length < 6) {
+      errors.password = 'Password must be at least 6 characters'
+    }
+
+    // Phone validation (optional but if provided, check format)
+    if (phone && !/^[+]?[\d\s()-]{10,}$/.test(phone.replace(/\s/g, ''))) {
+      errors.phone = 'Please enter a valid phone number'
+    }
+
+    setFieldErrors(errors)
+    return Object.keys(errors).length === 0
+  }
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    if (!validateForm()) {
+      return
+    }
+
     setLoading(true)
     setError(null)
 
     const supabase = createClient()
 
-    // Get the site URL for email redirect
-    const siteUrl = window.location.origin
-
-    const { error: authError } = await supabase.auth.signUp({
+    const { data, error: authError } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: `${siteUrl}/auth/callback?next=${redirect}`,
         data: {
           full_name: fullName,
           phone: phone,
@@ -48,77 +78,94 @@ function SignupForm() {
       return
     }
 
-    setSuccess(true)
+    // If user is confirmed immediately (email confirmation disabled), redirect
+    if (data.user && data.session) {
+      router.push(redirect)
+    } else if (data.user) {
+      // Email confirmation required - show message
+      router.push('/auth/confirm-email?email=' + encodeURIComponent(email))
+    }
+
     setLoading(false)
   }
 
-  if (success) {
-    return (
-      <div className="w-full max-w-md text-center">
-        <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-california-gold/20 flex items-center justify-center">
-          <Scissors className="w-8 h-8 text-california-gold" />
-        </div>
-        <h1 className="font-bebas text-4xl text-warm-white tracking-wide mb-4">
-          Check Your Email
-        </h1>
-        <p className="text-warm-white/60 mb-6">
-          We sent a confirmation link to <strong className="text-warm-white">{email}</strong>.
-          Click the link to activate your account.
-        </p>
-        <Link href="/auth/login">
-          <Button variant="gold-outline">Back to Login</Button>
-        </Link>
-      </div>
-    )
-  }
-
   return (
-    <div className="w-full max-w-md">
-      <div className="text-center mb-8">
-        <Link href="/" className="inline-flex items-center gap-2 mb-6">
-          <Scissors className="w-8 h-8 text-california-gold" />
-          <span className="font-bebas text-2xl text-warm-white tracking-wider">RAND V</span>
+    <div className="w-full max-w-md px-4 sm:px-0">
+      <div className="text-center mb-6 sm:mb-8">
+        <Link href="/" className="inline-flex items-center gap-2 mb-4 sm:mb-6">
+          <Scissors className="w-6 h-6 sm:w-8 sm:h-8 text-california-gold" />
+          <span className="font-bebas text-xl sm:text-2xl text-warm-white tracking-wider">RAND V</span>
         </Link>
-        <h1 className="font-bebas text-4xl text-warm-white tracking-wide mb-2">
+        <h1 className="font-bebas text-3xl sm:text-4xl text-warm-white tracking-wide mb-2">
           Create Account
         </h1>
-        <p className="text-warm-white/60">
+        <p className="text-warm-white/60 text-sm sm:text-base">
           Join The Rand V Experience
         </p>
       </div>
 
       <form onSubmit={handleSignup} className="space-y-4">
-        <Input
-          type="text"
-          label="Full Name"
-          placeholder="Your name"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-          required
-        />
-        <Input
-          type="email"
-          label="Email"
-          placeholder="your@email.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <Input
-          type="tel"
-          label="Phone (for appointment reminders)"
-          placeholder="+1 (555) 123-4567"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-        />
-        <Input
-          type="password"
-          label="Password"
-          placeholder="Create a password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+        <div>
+          <Input
+            type="text"
+            label="Full Name"
+            placeholder="Your name"
+            value={fullName}
+            onChange={(e) => {
+              setFullName(e.target.value)
+              if (fieldErrors.fullName) setFieldErrors({...fieldErrors, fullName: ''})
+            }}
+            error={fieldErrors.fullName}
+            required
+          />
+        </div>
+        <div>
+          <Input
+            type="email"
+            label="Email"
+            placeholder="your@email.com"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value)
+              if (fieldErrors.email) setFieldErrors({...fieldErrors, email: ''})
+            }}
+            error={fieldErrors.email}
+            required
+          />
+        </div>
+        <div>
+          <Input
+            type="tel"
+            label="Phone (for appointment reminders)"
+            placeholder="+1 (555) 123-4567"
+            value={phone}
+            onChange={(e) => {
+              setPhone(e.target.value)
+              if (fieldErrors.phone) setFieldErrors({...fieldErrors, phone: ''})
+            }}
+            error={fieldErrors.phone}
+          />
+        </div>
+        <div>
+          <Input
+            type="password"
+            label="Password"
+            placeholder="Min. 6 characters"
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value)
+              if (fieldErrors.password) setFieldErrors({...fieldErrors, password: ''})
+            }}
+            error={fieldErrors.password}
+            required
+          />
+          {password && password.length >= 6 && (
+            <div className="flex items-center gap-1 mt-1 text-green-500 text-xs">
+              <Check className="w-3 h-3" />
+              <span>Password strength: Good</span>
+            </div>
+          )}
+        </div>
 
         {error && (
           <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
@@ -131,7 +178,7 @@ function SignupForm() {
         </Button>
       </form>
 
-      <p className="text-center text-warm-white/60 mt-6">
+      <p className="text-center text-warm-white/60 mt-6 text-sm sm:text-base">
         Already have an account?{' '}
         <Link href={`/auth/login?redirect=${redirect}`} className="text-california-gold hover:underline">
           Sign in
@@ -143,7 +190,7 @@ function SignupForm() {
 
 export default function SignupPage() {
   return (
-    <div className="min-h-screen bg-matte-black flex items-center justify-center px-6">
+    <div className="min-h-screen bg-matte-black flex items-center justify-center px-4 sm:px-6">
       <Suspense fallback={<div className="text-warm-white">Loading...</div>}>
         <SignupForm />
       </Suspense>

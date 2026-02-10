@@ -242,8 +242,11 @@ export default function Home() {
 
           <div className="flex items-center gap-4">
             <a
-              href="#"
+              href="https://instagram.com/randvexperience"
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-10 h-10 rounded-full bg-charcoal-light flex items-center justify-center text-warm-white/60 hover:text-california-gold hover:bg-california-gold/10 transition-all"
+              aria-label="Follow on Instagram"
             >
               <Instagram className="w-5 h-5" />
             </a>

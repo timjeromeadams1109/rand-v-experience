@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Send, Paperclip, MessageCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
@@ -16,6 +17,7 @@ interface DMDrawerProps {
 }
 
 export function DMDrawer({ isOpen, onClose }: DMDrawerProps) {
+  const router = useRouter()
   const [messages, setMessages] = useState<(Message & { sender: Profile })[]>([])
   const [conversation, setConversation] = useState<Conversation | null>(null)
   const [currentUser, setCurrentUser] = useState<Profile | null>(null)
@@ -210,7 +212,10 @@ export function DMDrawer({ isOpen, onClose }: DMDrawerProps) {
                   <p className="text-warm-white/60 mb-6">
                     Connect directly with Rand V for consultations and inquiries.
                   </p>
-                  <Button onClick={() => {/* Navigate to auth */}}>
+                  <Button onClick={() => {
+                    onClose()
+                    router.push('/auth/login?redirect=/')
+                  }}>
                     Sign In
                   </Button>
                 </div>
