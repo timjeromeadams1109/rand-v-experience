@@ -27,18 +27,24 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  // Check for auth code in URL and handle email confirmation
+  // Check for auth code in URL and handle email confirmation/password reset
   const { searchParams } = new URL(request.url)
   const code = searchParams.get('code')
   const error = searchParams.get('error')
   const errorDescription = searchParams.get('error_description')
+  const type = searchParams.get('type')
 
   // If there's an auth code, exchange it for a session
   if (code && !request.nextUrl.pathname.startsWith('/auth/callback')) {
     const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
 
     if (!exchangeError) {
-      // Redirect to home without the code param
+      // Check if this is a password recovery flow
+      if (type === 'recovery') {
+        const redirectUrl = new URL('/auth/reset-password', request.url)
+        return NextResponse.redirect(redirectUrl)
+      }
+      // Regular email confirmation - redirect to home
       const redirectUrl = new URL('/', request.url)
       return NextResponse.redirect(redirectUrl)
     } else {
