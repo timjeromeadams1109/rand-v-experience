@@ -77,19 +77,19 @@ export default async function LookbookPage() {
   return (
     <div className="min-h-screen bg-matte-black">
       {/* Header */}
-      <header className="border-b border-charcoal-light">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 text-warm-white/70 hover:text-california-gold transition-colors">
-            <ArrowLeft className="w-5 h-5" />
-            <span>Back</span>
+      <header className="border-b border-charcoal-light sticky top-0 bg-matte-black/95 backdrop-blur-sm z-30">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-1 sm:gap-2 text-warm-white/70 hover:text-california-gold transition-colors">
+            <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span className="text-sm sm:text-base">Back</span>
           </Link>
-          <div className="flex items-center gap-2">
-            <Scissors className="w-6 h-6 text-california-gold" />
-            <span className="font-bebas text-xl text-warm-white tracking-wider">RAND V</span>
+          <div className="flex items-center gap-1 sm:gap-2">
+            <Scissors className="w-5 h-5 sm:w-6 sm:h-6 text-california-gold" />
+            <span className="font-bebas text-lg sm:text-xl text-warm-white tracking-wider">RAND V</span>
           </div>
           <Link
             href="/booking"
-            className="text-california-gold hover:text-california-gold-light transition-colors text-sm font-medium"
+            className="text-california-gold hover:text-california-gold-light transition-colors text-xs sm:text-sm font-medium"
           >
             Book Now
           </Link>
@@ -97,12 +97,12 @@ export default async function LookbookPage() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-6 py-12">
-        <div className="text-center mb-12">
-          <h1 className="font-bebas text-4xl md:text-5xl text-warm-white tracking-wide mb-4">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        <div className="text-center mb-8 sm:mb-12">
+          <h1 className="font-bebas text-3xl sm:text-4xl md:text-5xl text-warm-white tracking-wide mb-3 sm:mb-4">
             The Lookbook
           </h1>
-          <p className="text-warm-white/60 max-w-xl mx-auto">
+          <p className="text-warm-white/60 max-w-xl mx-auto text-sm sm:text-base px-4">
             Swipe through our portfolio of signature styles. Like the ones that speak to you, and bring your vision to your next appointment.
           </p>
         </div>

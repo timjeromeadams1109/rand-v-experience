@@ -66,10 +66,10 @@ export function TimeSlots({ selectedDate, selectedSlot, onSlotSelect, className 
 
   if (!selectedDate) {
     return (
-      <div className={cn('bg-charcoal rounded-lg p-6 border border-charcoal-light', className)}>
+      <div className={cn('bg-charcoal rounded-lg p-4 sm:p-6 border border-charcoal-light', className)}>
         <div className="flex items-center gap-3 text-warm-white/40">
           <Clock className="w-5 h-5" />
-          <p>Select a date to view available times</p>
+          <p className="text-sm sm:text-base">Select a date to view available times</p>
         </div>
       </div>
     )
@@ -77,13 +77,13 @@ export function TimeSlots({ selectedDate, selectedSlot, onSlotSelect, className 
 
   if (loading) {
     return (
-      <div className={cn('bg-charcoal rounded-lg p-6 border border-charcoal-light', className)}>
-        <h3 className="font-bebas text-xl text-warm-white mb-4 tracking-wide">
+      <div className={cn('bg-charcoal rounded-lg p-4 sm:p-6 border border-charcoal-light', className)}>
+        <h3 className="font-bebas text-lg sm:text-xl text-warm-white mb-3 sm:mb-4 tracking-wide">
           Available Times
         </h3>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="h-12 bg-charcoal-light animate-pulse rounded" />
+            <div key={i} className="h-10 sm:h-12 bg-charcoal-light animate-pulse rounded" />
           ))}
         </div>
       </div>
@@ -93,17 +93,17 @@ export function TimeSlots({ selectedDate, selectedSlot, onSlotSelect, className 
   const availableSlots = slots.filter((slot) => !bookedSlots.has(slot.id))
 
   return (
-    <div className={cn('bg-charcoal rounded-lg p-6 border border-charcoal-light', className)}>
-      <h3 className="font-bebas text-xl text-warm-white mb-4 tracking-wide">
+    <div className={cn('bg-charcoal rounded-lg p-4 sm:p-6 border border-charcoal-light', className)}>
+      <h3 className="font-bebas text-lg sm:text-xl text-warm-white mb-3 sm:mb-4 tracking-wide">
         Available Times
       </h3>
 
       {availableSlots.length === 0 ? (
-        <p className="text-warm-white/40 text-center py-8">
+        <p className="text-warm-white/40 text-center py-6 sm:py-8 text-sm sm:text-base">
           No available times for this date
         </p>
       ) : (
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
           {availableSlots.map((slot) => {
             const isSelected = selectedSlot?.id === slot.id
 
@@ -112,8 +112,8 @@ export function TimeSlots({ selectedDate, selectedSlot, onSlotSelect, className 
                 key={slot.id}
                 onClick={() => onSlotSelect(slot)}
                 className={cn(
-                  'py-3 px-4 rounded-md text-center transition-all duration-200',
-                  'border font-medium',
+                  'py-2 sm:py-3 px-3 sm:px-4 rounded-md text-center transition-all duration-200',
+                  'border font-medium text-sm sm:text-base',
                   isSelected
                     ? 'bg-california-gold text-matte-black border-california-gold'
                     : 'bg-charcoal-light text-warm-white border-charcoal-light hover:border-california-gold hover:text-california-gold'

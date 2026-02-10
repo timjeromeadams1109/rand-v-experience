@@ -76,30 +76,30 @@ export function StyleCard({ item, onSwipe, isTop }: StyleCardProps) {
 
       {/* Like indicator */}
       <motion.div
-        className="absolute top-8 right-8 px-6 py-2 border-4 border-green-500 rounded-lg rotate-12"
+        className="absolute top-4 sm:top-8 right-4 sm:right-8 px-4 sm:px-6 py-1 sm:py-2 border-2 sm:border-4 border-green-500 rounded-lg rotate-12"
         style={{ opacity: likeOpacity }}
       >
-        <span className="text-green-500 font-bebas text-4xl tracking-wider">LIKE</span>
+        <span className="text-green-500 font-bebas text-2xl sm:text-4xl tracking-wider">LIKE</span>
       </motion.div>
 
       {/* Nope indicator */}
       <motion.div
-        className="absolute top-8 left-8 px-6 py-2 border-4 border-red-500 rounded-lg -rotate-12"
+        className="absolute top-4 sm:top-8 left-4 sm:left-8 px-4 sm:px-6 py-1 sm:py-2 border-2 sm:border-4 border-red-500 rounded-lg -rotate-12"
         style={{ opacity: nopeOpacity }}
       >
-        <span className="text-red-500 font-bebas text-4xl tracking-wider">NOPE</span>
+        <span className="text-red-500 font-bebas text-2xl sm:text-4xl tracking-wider">NOPE</span>
       </motion.div>
 
       {/* Content */}
-      <div className="absolute bottom-0 left-0 right-0 p-6">
-        <h3 className="font-bebas text-3xl text-warm-white mb-2 tracking-wide">
+      <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
+        <h3 className="font-bebas text-2xl sm:text-3xl text-warm-white mb-1 sm:mb-2 tracking-wide">
           {item.title}
         </h3>
         {item.description && (
-          <p className="text-warm-white/70 text-sm mb-3">{item.description}</p>
+          <p className="text-warm-white/70 text-xs sm:text-sm mb-2 sm:mb-3 line-clamp-2">{item.description}</p>
         )}
         {item.category && (
-          <span className="inline-block px-3 py-1 bg-california-gold/20 text-california-gold text-sm rounded-full">
+          <span className="inline-block px-2 sm:px-3 py-0.5 sm:py-1 bg-california-gold/20 text-california-gold text-xs sm:text-sm rounded-full">
             {item.category}
           </span>
         )}
@@ -115,28 +115,28 @@ interface StyleCardButtonsProps {
 
 export function StyleCardButtons({ onLike, onPass }: StyleCardButtonsProps) {
   return (
-    <div className="flex items-center justify-center gap-8 mt-8">
+    <div className="flex items-center justify-center gap-6 sm:gap-8 mt-6 sm:mt-8">
       <button
         onClick={onPass}
         className={cn(
-          'w-16 h-16 rounded-full flex items-center justify-center',
+          'w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center',
           'bg-charcoal border-2 border-red-500 text-red-500',
           'hover:bg-red-500 hover:text-white transition-all duration-300',
-          'shadow-lg hover:shadow-red-500/20'
+          'shadow-lg hover:shadow-red-500/20 active:scale-95'
         )}
       >
-        <X className="w-8 h-8" />
+        <X className="w-6 h-6 sm:w-8 sm:h-8" />
       </button>
       <button
         onClick={onLike}
         className={cn(
-          'w-16 h-16 rounded-full flex items-center justify-center',
+          'w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center',
           'bg-charcoal border-2 border-california-gold text-california-gold',
           'hover:bg-california-gold hover:text-matte-black transition-all duration-300',
-          'shadow-lg hover:shadow-gold-glow'
+          'shadow-lg hover:shadow-gold-glow active:scale-95'
         )}
       >
-        <Heart className="w-8 h-8" />
+        <Heart className="w-6 h-6 sm:w-8 sm:h-8" />
       </button>
     </div>
   )

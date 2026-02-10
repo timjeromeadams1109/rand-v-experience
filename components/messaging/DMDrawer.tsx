@@ -172,26 +172,26 @@ export function DMDrawer({ isOpen, onClose }: DMDrawerProps) {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-matte-black border-l border-charcoal-light z-50 flex flex-col"
+            className="fixed right-0 top-0 bottom-0 w-full sm:max-w-md bg-matte-black border-l border-charcoal-light z-50 flex flex-col"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-charcoal-light">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-california-gold flex items-center justify-center">
-                  <span className="text-matte-black font-bold">RV</span>
+            <div className="flex items-center justify-between p-3 sm:p-4 border-b border-charcoal-light safe-area-top">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-california-gold flex items-center justify-center flex-shrink-0">
+                  <span className="text-matte-black font-bold text-sm sm:text-base">RV</span>
                 </div>
                 <div>
-                  <h3 className="font-bebas text-xl text-warm-white tracking-wide">
+                  <h3 className="font-bebas text-lg sm:text-xl text-warm-white tracking-wide">
                     The Bridge
                   </h3>
-                  <p className="text-sm text-warm-white/50">Direct message with Rand V</p>
+                  <p className="text-xs sm:text-sm text-warm-white/50">Direct message with Rand V</p>
                 </div>
               </div>
               <button
                 onClick={onClose}
                 className="p-2 text-warm-white/60 hover:text-warm-white transition-colors"
               >
-                <X className="w-6 h-6" />
+                <X className="w-5 h-5 sm:w-6 sm:h-6" />
               </button>
             </div>
 

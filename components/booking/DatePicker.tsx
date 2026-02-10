@@ -80,16 +80,16 @@ export function DatePicker({ selectedDate, onDateSelect, className }: DatePicker
   const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
   return (
-    <div className={cn('bg-charcoal rounded-lg p-6 border border-charcoal-light', className)}>
+    <div className={cn('bg-charcoal rounded-lg p-4 sm:p-6 border border-charcoal-light', className)}>
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-4 sm:mb-6">
         <button
           onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1))}
           className="p-2 text-warm-white/60 hover:text-california-gold transition-colors"
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
-        <h3 className="font-bebas text-2xl text-warm-white tracking-wide">
+        <h3 className="font-bebas text-lg sm:text-2xl text-warm-white tracking-wide">
           {currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
         </h3>
         <button
@@ -101,26 +101,27 @@ export function DatePicker({ selectedDate, onDateSelect, className }: DatePicker
       </div>
 
       {/* Weekday headers */}
-      <div className="grid grid-cols-7 gap-2 mb-2">
+      <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-1 sm:mb-2">
         {weekdays.map((day) => (
-          <div key={day} className="text-center text-sm text-warm-white/40 py-2">
-            {day}
+          <div key={day} className="text-center text-xs sm:text-sm text-warm-white/40 py-1 sm:py-2">
+            {day.slice(0, 1)}
+            <span className="hidden sm:inline">{day.slice(1)}</span>
           </div>
         ))}
       </div>
 
       {/* Days grid */}
       {loading ? (
-        <div className="grid grid-cols-7 gap-2">
+        <div className="grid grid-cols-7 gap-1 sm:gap-2">
           {Array.from({ length: 35 }).map((_, i) => (
-            <div key={i} className="h-10 bg-charcoal-light animate-pulse rounded" />
+            <div key={i} className="h-9 sm:h-10 bg-charcoal-light animate-pulse rounded" />
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-7 gap-2">
+        <div className="grid grid-cols-7 gap-1 sm:gap-2">
           {days.map((date, index) => {
             if (!date) {
-              return <div key={`empty-${index}`} className="h-10" />
+              return <div key={`empty-${index}`} className="h-9 sm:h-10" />
             }
 
             const available = isDateAvailable(date)
@@ -132,7 +133,7 @@ export function DatePicker({ selectedDate, onDateSelect, className }: DatePicker
                 onClick={() => available && onDateSelect(date)}
                 disabled={!available}
                 className={cn(
-                  'h-10 rounded-md text-sm font-medium transition-all duration-200',
+                  'h-9 sm:h-10 rounded-md text-xs sm:text-sm font-medium transition-all duration-200',
                   available
                     ? 'hover:bg-california-gold hover:text-matte-black cursor-pointer'
                     : 'text-warm-white/20 cursor-not-allowed',
@@ -151,14 +152,14 @@ export function DatePicker({ selectedDate, onDateSelect, className }: DatePicker
       )}
 
       {/* Legend */}
-      <div className="flex items-center gap-4 mt-6 pt-4 border-t border-charcoal-light">
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded bg-california-gold" />
-          <span className="text-sm text-warm-white/60">Selected</span>
+      <div className="flex items-center gap-3 sm:gap-4 mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-charcoal-light">
+        <div className="flex items-center gap-1 sm:gap-2">
+          <div className="w-2 h-2 sm:w-3 sm:h-3 rounded bg-california-gold" />
+          <span className="text-xs sm:text-sm text-warm-white/60">Selected</span>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded bg-charcoal-light" />
-          <span className="text-sm text-warm-white/60">Available</span>
+        <div className="flex items-center gap-1 sm:gap-2">
+          <div className="w-2 h-2 sm:w-3 sm:h-3 rounded bg-charcoal-light" />
+          <span className="text-xs sm:text-sm text-warm-white/60">Available</span>
         </div>
       </div>
     </div>

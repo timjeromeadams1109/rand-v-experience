@@ -91,18 +91,18 @@ export function SwipeContainer({ initialItems }: SwipeContainerProps) {
   const isComplete = currentIndex >= items.length
 
   return (
-    <div className="max-w-lg mx-auto">
+    <div className="max-w-lg mx-auto px-4 sm:px-0">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="font-bebas text-3xl text-warm-white tracking-wide">
+      <div className="flex items-center justify-between mb-4 sm:mb-6">
+        <h2 className="font-bebas text-2xl sm:text-3xl text-warm-white tracking-wide">
           The Lookbook
         </h2>
         <button
           onClick={() => setShowSaved(!showSaved)}
-          className="flex items-center gap-2 text-california-gold hover:text-california-gold-light transition-colors"
+          className="flex items-center gap-1 sm:gap-2 text-california-gold hover:text-california-gold-light transition-colors"
         >
-          <Bookmark className="w-5 h-5" />
-          <span className="font-medium">{likedItems.length} Saved</span>
+          <Bookmark className="w-4 h-4 sm:w-5 sm:h-5" />
+          <span className="font-medium text-sm sm:text-base">{likedItems.length} Saved</span>
         </button>
       </div>
 
@@ -183,7 +183,7 @@ export function SwipeContainer({ initialItems }: SwipeContainerProps) {
       ) : (
         // Card stack
         <>
-          <div className="relative h-[500px] w-full">
+          <div className="relative h-[400px] sm:h-[500px] w-full">
             <AnimatePresence>
               {nextItem && (
                 <StyleCard
@@ -206,7 +206,7 @@ export function SwipeContainer({ initialItems }: SwipeContainerProps) {
 
           <StyleCardButtons onLike={handleLike} onPass={handlePass} />
 
-          <p className="text-center text-warm-white/40 text-sm mt-4">
+          <p className="text-center text-warm-white/40 text-xs sm:text-sm mt-3 sm:mt-4">
             {currentIndex + 1} of {items.length}
           </p>
         </>
