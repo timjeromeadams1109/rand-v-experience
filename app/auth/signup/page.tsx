@@ -27,10 +27,14 @@ function SignupForm() {
 
     const supabase = createClient()
 
+    // Get the site URL for email redirect
+    const siteUrl = window.location.origin
+
     const { error: authError } = await supabase.auth.signUp({
       email,
       password,
       options: {
+        emailRedirectTo: `${siteUrl}/auth/callback?next=${redirect}`,
         data: {
           full_name: fullName,
           phone: phone,
