@@ -16,6 +16,7 @@ export interface Database {
           phone: string | null
           avatar_url: string | null
           tier: 'standard' | 'foundational'
+          is_admin: boolean
           created_at: string
         }
         Insert: {
@@ -24,6 +25,7 @@ export interface Database {
           phone?: string | null
           avatar_url?: string | null
           tier?: 'standard' | 'foundational'
+          is_admin?: boolean
           created_at?: string
         }
         Update: {
@@ -32,6 +34,7 @@ export interface Database {
           phone?: string | null
           avatar_url?: string | null
           tier?: 'standard' | 'foundational'
+          is_admin?: boolean
           created_at?: string
         }
       }
