@@ -17,16 +17,16 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative min-h-screen flex flex-col">
         {/* Background with overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-matte-black/50 via-matte-black/70 to-matte-black" />
+        <div className="absolute inset-0 bg-gradient-to-b from-matte-black/60 via-matte-black/80 to-matte-black z-[1]" />
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-30"
+          className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: `url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%231A1A1A" width="100" height="100"/><circle fill="%23D4AF37" cx="50" cy="50" r="1" opacity="0.3"/></svg>')`
+            backgroundImage: `url('https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=1920&q=80')`
           }}
         />
 
         {/* Navigation */}
-        <nav className="relative z-10 flex items-center justify-between px-4 sm:px-6 py-4 sm:py-6 md:px-12">
+        <nav className="relative z-20 flex items-center justify-between px-4 sm:px-6 py-4 sm:py-6 md:px-12">
           <div className="flex items-center gap-2">
             <Scissors className="w-6 h-6 sm:w-8 sm:h-8 text-california-gold" />
             <span className="font-bebas text-xl sm:text-2xl text-warm-white tracking-wider">RAND V</span>
@@ -56,7 +56,7 @@ export default function Home() {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden absolute top-16 left-0 right-0 z-20 bg-matte-black/95 backdrop-blur-lg border-b border-charcoal-light">
+          <div className="md:hidden absolute top-16 left-0 right-0 z-30 bg-matte-black/95 backdrop-blur-lg border-b border-charcoal-light">
             <div className="flex flex-col p-4 space-y-4">
               <Link
                 href="/lookbook"
@@ -89,7 +89,7 @@ export default function Home() {
         )}
 
         {/* Hero Content */}
-        <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-4 sm:px-6">
+        <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-4 sm:px-6 pt-8 sm:pt-0">
           <h1 className="font-bebas text-5xl sm:text-6xl md:text-8xl text-warm-white tracking-wide mb-4 animate-fade-in">
             THE RAND V
             <span className="block text-california-gold">EXPERIENCE</span>
