@@ -76,7 +76,12 @@ export interface Database {
           notes: string | null
           liked_styles: string[] | null
           status: 'confirmed' | 'completed' | 'cancelled'
+          contact_email: string | null
+          contact_phone: string | null
+          confirmation_sent: boolean
           reminder_sent: boolean
+          reminder_24h_sent: boolean
+          reminder_1h_sent: boolean
           created_at: string
         }
         Insert: {
@@ -87,7 +92,12 @@ export interface Database {
           notes?: string | null
           liked_styles?: string[] | null
           status?: 'confirmed' | 'completed' | 'cancelled'
+          contact_email?: string | null
+          contact_phone?: string | null
+          confirmation_sent?: boolean
           reminder_sent?: boolean
+          reminder_24h_sent?: boolean
+          reminder_1h_sent?: boolean
           created_at?: string
         }
         Update: {
@@ -98,7 +108,12 @@ export interface Database {
           notes?: string | null
           liked_styles?: string[] | null
           status?: 'confirmed' | 'completed' | 'cancelled'
+          contact_email?: string | null
+          contact_phone?: string | null
+          confirmation_sent?: boolean
           reminder_sent?: boolean
+          reminder_24h_sent?: boolean
+          reminder_1h_sent?: boolean
           created_at?: string
         }
       }

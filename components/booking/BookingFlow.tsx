@@ -44,11 +44,24 @@ export function BookingFlow() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedSlot, setSelectedSlot] = useState<Availability | null>(null)
   const [notes, setNotes] = useState('')
+  const [contactEmail, setContactEmail] = useState('')
+  const [contactPhone, setContactPhone] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const handleBooking = async () => {
     if (!selectedService || !selectedSlot) return
+
+    // Validate contact info
+    if (!contactEmail && !contactPhone) {
+      setError('Please provide an email or phone number for confirmation.')
+      return
+    }
+
+    if (contactEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) {
+      setError('Please enter a valid email address.')
+      return
+    }
 
     setLoading(true)
     setError(null)
@@ -63,17 +76,35 @@ export function BookingFlow() {
         return
       }
 
-      const { error: bookingError } = await supabase
+      const { data: appointment, error: bookingError } = await supabase
         .from('appointments')
         .insert({
           user_id: user.id,
           availability_id: selectedSlot.id,
           service_type: selectedService,
           notes: notes || null,
+          contact_email: contactEmail || null,
+          contact_phone: contactPhone || null,
           status: 'confirmed'
         })
+        .select()
+        .single()
 
       if (bookingError) throw bookingError
+
+      // Send confirmation notifications
+      if (appointment) {
+        try {
+          await fetch('/api/notifications/send-confirmation', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ appointmentId: appointment.id })
+          })
+        } catch {
+          // Don't fail booking if notification fails
+          console.error('Failed to send confirmation')
+        }
+      }
 
       setStep('confirmation')
     } catch (err) {
@@ -95,7 +126,7 @@ export function BookingFlow() {
       case 'datetime':
         return !!selectedDate && !!selectedSlot
       case 'details':
-        return true
+        return !!(contactEmail || contactPhone)
       default:
         return false
     }
@@ -296,6 +327,50 @@ export function BookingFlow() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Contact Information */}
+          <div className="mb-4 sm:mb-6">
+            <h3 className="text-warm-white font-medium mb-3 text-sm sm:text-base">
+              Contact for Confirmation & Reminders
+            </h3>
+            <p className="text-warm-white/50 text-xs sm:text-sm mb-4">
+              We&apos;ll send you a confirmation and reminders before your appointment.
+            </p>
+
+            <div className="space-y-3">
+              <div>
+                <label className="block text-xs sm:text-sm text-warm-white/70 mb-1.5">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  value={contactEmail}
+                  onChange={(e) => setContactEmail(e.target.value)}
+                  placeholder="your@email.com"
+                  className="w-full bg-charcoal-light border border-charcoal-light rounded-md px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-warm-white placeholder-warm-white/40 focus:outline-none focus:border-california-gold transition-colors"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs sm:text-sm text-warm-white/70 mb-1.5">
+                  Phone Number <span className="text-warm-white/40">(for SMS)</span>
+                </label>
+                <input
+                  type="tel"
+                  value={contactPhone}
+                  onChange={(e) => setContactPhone(e.target.value)}
+                  placeholder="+1 (555) 000-0000"
+                  className="w-full bg-charcoal-light border border-charcoal-light rounded-md px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-warm-white placeholder-warm-white/40 focus:outline-none focus:border-california-gold transition-colors"
+                />
+              </div>
+            </div>
+
+            {!contactEmail && !contactPhone && (
+              <p className="text-california-gold/80 text-xs mt-2">
+                Please provide at least one contact method
+              </p>
+            )}
+          </div>
 
           <div className="mb-4 sm:mb-6">
             <label className="block text-xs sm:text-sm text-warm-white/70 mb-2">
