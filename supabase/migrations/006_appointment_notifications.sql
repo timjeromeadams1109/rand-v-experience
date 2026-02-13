@@ -1,5 +1,6 @@
 -- Add contact fields and reminder tracking to appointments
 ALTER TABLE public.appointments
+ADD COLUMN IF NOT EXISTS client_name TEXT,
 ADD COLUMN IF NOT EXISTS contact_email TEXT,
 ADD COLUMN IF NOT EXISTS contact_phone TEXT,
 ADD COLUMN IF NOT EXISTS confirmation_sent BOOLEAN DEFAULT false,

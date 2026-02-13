@@ -43,16 +43,22 @@ export function BookingFlow() {
   const [selectedService, setSelectedService] = useState<string | null>(null)
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedSlot, setSelectedSlot] = useState<Availability | null>(null)
-  const [notes, setNotes] = useState('')
+  const [clientName, setClientName] = useState('')
   const [contactEmail, setContactEmail] = useState('')
   const [contactPhone, setContactPhone] = useState('')
+  const [notes, setNotes] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const handleBooking = async () => {
     if (!selectedService || !selectedSlot) return
 
-    // Validate contact info
+    // Validate required fields
+    if (!clientName.trim()) {
+      setError('Please enter your name.')
+      return
+    }
+
     if (!contactEmail && !contactPhone) {
       setError('Please provide an email or phone number for confirmation.')
       return
@@ -82,6 +88,7 @@ export function BookingFlow() {
           user_id: user.id,
           availability_id: selectedSlot.id,
           service_type: selectedService,
+          client_name: clientName.trim(),
           notes: notes || null,
           contact_email: contactEmail || null,
           contact_phone: contactPhone || null,
@@ -126,7 +133,7 @@ export function BookingFlow() {
       case 'datetime':
         return !!selectedDate && !!selectedSlot
       case 'details':
-        return !!(contactEmail || contactPhone)
+        return !!(clientName.trim() && (contactEmail || contactPhone))
       default:
         return false
     }
@@ -303,90 +310,106 @@ export function BookingFlow() {
 
       {step === 'details' && (
         <div className="max-w-lg mx-auto px-4 sm:px-0">
-          <h2 className="font-bebas text-2xl sm:text-3xl text-warm-white text-center mb-6 sm:mb-8 tracking-wide">
-            Final Details
+          <h2 className="font-bebas text-2xl sm:text-3xl text-warm-white text-center mb-2 tracking-wide">
+            Your Information
           </h2>
+          <p className="text-warm-white/50 text-center text-sm mb-6 sm:mb-8">
+            We&apos;ll send confirmation and reminders to keep you on track.
+          </p>
 
-          <Card className="mb-4 sm:mb-6">
-            <CardContent className="py-4 sm:py-6 space-y-3 sm:space-y-4">
-              <div className="flex justify-between text-sm sm:text-base">
-                <span className="text-warm-white/60">Service</span>
-                <span className="text-warm-white text-right">{getSelectedServiceDetails()?.name}</span>
+          {/* Contact Form - Primary Focus */}
+          <Card className="mb-6">
+            <CardContent className="py-6 sm:py-8">
+              <div className="space-y-4">
+                {/* Name Field */}
+                <div>
+                  <label className="block text-sm text-warm-white mb-2 font-medium">
+                    Your Name <span className="text-california-gold">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={clientName}
+                    onChange={(e) => setClientName(e.target.value)}
+                    placeholder="Enter your full name"
+                    autoFocus
+                    className="w-full bg-matte-black border-2 border-charcoal-light rounded-lg px-4 py-3.5 text-base text-warm-white placeholder-warm-white/40 focus:outline-none focus:border-california-gold transition-colors"
+                  />
+                </div>
+
+                {/* Email Field */}
+                <div>
+                  <label className="block text-sm text-warm-white mb-2 font-medium">
+                    Email Address <span className="text-california-gold">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    value={contactEmail}
+                    onChange={(e) => setContactEmail(e.target.value)}
+                    placeholder="your@email.com"
+                    className="w-full bg-matte-black border-2 border-charcoal-light rounded-lg px-4 py-3.5 text-base text-warm-white placeholder-warm-white/40 focus:outline-none focus:border-california-gold transition-colors"
+                  />
+                </div>
+
+                {/* Phone Field */}
+                <div>
+                  <label className="block text-sm text-warm-white mb-2 font-medium">
+                    Phone Number <span className="text-warm-white/40 font-normal">(for SMS reminders)</span>
+                  </label>
+                  <input
+                    type="tel"
+                    value={contactPhone}
+                    onChange={(e) => setContactPhone(e.target.value)}
+                    placeholder="+1 (555) 000-0000"
+                    className="w-full bg-matte-black border-2 border-charcoal-light rounded-lg px-4 py-3.5 text-base text-warm-white placeholder-warm-white/40 focus:outline-none focus:border-california-gold transition-colors"
+                  />
+                </div>
+
+                {/* Special Requests */}
+                <div>
+                  <label className="block text-sm text-warm-white mb-2 font-medium">
+                    Special Requests <span className="text-warm-white/40 font-normal">(optional)</span>
+                  </label>
+                  <textarea
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    placeholder="Style references, specific requests..."
+                    rows={3}
+                    className="w-full bg-matte-black border-2 border-charcoal-light rounded-lg px-4 py-3 text-base text-warm-white placeholder-warm-white/40 focus:outline-none focus:border-california-gold transition-colors resize-none"
+                  />
+                </div>
               </div>
-              <div className="flex justify-between text-sm sm:text-base">
-                <span className="text-warm-white/60">Date</span>
-                <span className="text-warm-white">
-                  {selectedDate && formatDate(selectedDate)}
-                </span>
-              </div>
-              <div className="flex justify-between text-sm sm:text-base">
-                <span className="text-warm-white/60">Time</span>
-                <span className="text-warm-white">
-                  {selectedSlot && formatTime(selectedSlot.start_time)}
-                </span>
-              </div>
+
+              {(!clientName.trim() || (!contactEmail && !contactPhone)) && (
+                <p className="text-california-gold/80 text-sm mt-4 flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-california-gold"></span>
+                  {!clientName.trim()
+                    ? 'Name is required'
+                    : 'Email or phone required for confirmation'}
+                </p>
+              )}
             </CardContent>
           </Card>
 
-          {/* Contact Information */}
-          <div className="mb-4 sm:mb-6">
-            <h3 className="text-warm-white font-medium mb-3 text-sm sm:text-base">
-              Contact for Confirmation & Reminders
-            </h3>
-            <p className="text-warm-white/50 text-xs sm:text-sm mb-4">
-              We&apos;ll send you a confirmation and reminders before your appointment.
-            </p>
-
-            <div className="space-y-3">
-              <div>
-                <label className="block text-xs sm:text-sm text-warm-white/70 mb-1.5">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  value={contactEmail}
-                  onChange={(e) => setContactEmail(e.target.value)}
-                  placeholder="your@email.com"
-                  className="w-full bg-charcoal-light border border-charcoal-light rounded-md px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-warm-white placeholder-warm-white/40 focus:outline-none focus:border-california-gold transition-colors"
-                />
+          {/* Booking Summary */}
+          <div className="bg-charcoal/50 rounded-lg p-4 border border-charcoal-light">
+            <h3 className="text-warm-white/60 text-xs uppercase tracking-wider mb-3">Booking Summary</h3>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-warm-white/70">Service</span>
+                <span className="text-warm-white font-medium">{getSelectedServiceDetails()?.name}</span>
               </div>
-
-              <div>
-                <label className="block text-xs sm:text-sm text-warm-white/70 mb-1.5">
-                  Phone Number <span className="text-warm-white/40">(for SMS)</span>
-                </label>
-                <input
-                  type="tel"
-                  value={contactPhone}
-                  onChange={(e) => setContactPhone(e.target.value)}
-                  placeholder="+1 (555) 000-0000"
-                  className="w-full bg-charcoal-light border border-charcoal-light rounded-md px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-warm-white placeholder-warm-white/40 focus:outline-none focus:border-california-gold transition-colors"
-                />
+              <div className="flex justify-between">
+                <span className="text-warm-white/70">Date & Time</span>
+                <span className="text-california-gold font-medium">
+                  {selectedDate && formatDate(selectedDate)} at {selectedSlot && formatTime(selectedSlot.start_time)}
+                </span>
               </div>
             </div>
-
-            {!contactEmail && !contactPhone && (
-              <p className="text-california-gold/80 text-xs mt-2">
-                Please provide at least one contact method
-              </p>
-            )}
-          </div>
-
-          <div className="mb-4 sm:mb-6">
-            <label className="block text-xs sm:text-sm text-warm-white/70 mb-2">
-              Special Requests (Optional)
-            </label>
-            <textarea
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              placeholder="Any specific style references or notes for Rand V..."
-              className="w-full bg-charcoal-light border border-charcoal-light rounded-md px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-warm-white placeholder-warm-white/40 focus:outline-none focus:border-california-gold transition-colors resize-none h-28 sm:h-32"
-            />
           </div>
 
           {error && (
-            <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
-              <p className="text-red-500 text-xs sm:text-sm">{error}</p>
+            <div className="mt-4 p-3 sm:p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
+              <p className="text-red-500 text-sm">{error}</p>
             </div>
           )}
         </div>

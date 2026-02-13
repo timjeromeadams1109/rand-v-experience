@@ -73,6 +73,7 @@ export interface Database {
           user_id: string
           availability_id: string
           service_type: string
+          client_name: string | null
           notes: string | null
           liked_styles: string[] | null
           status: 'confirmed' | 'completed' | 'cancelled'
@@ -89,6 +90,7 @@ export interface Database {
           user_id: string
           availability_id: string
           service_type: string
+          client_name?: string | null
           notes?: string | null
           liked_styles?: string[] | null
           status?: 'confirmed' | 'completed' | 'cancelled'
@@ -105,6 +107,7 @@ export interface Database {
           user_id?: string
           availability_id?: string
           service_type?: string
+          client_name?: string | null
           notes?: string | null
           liked_styles?: string[] | null
           status?: 'confirmed' | 'completed' | 'cancelled'
