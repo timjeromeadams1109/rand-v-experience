@@ -1,6 +1,6 @@
 import { Resend } from 'resend'
 
-const FROM_EMAIL = 'The Rand V Experience <noreply@randvexperience.com>'
+const FROM_EMAIL = 'The Rand V Experience <onboarding@resend.dev>'
 
 function getResendClient(): Resend | null {
   if (!process.env.RESEND_API_KEY) {
